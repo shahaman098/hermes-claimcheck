@@ -70,7 +70,7 @@ APPROVE_RISKY = {
     "name": "approve_risky",
     "description": (
         "One-time per-session approval to allow ClaimCheck risky tools "
-        "(shell_exec, write_file, edit_file, delete_file) after you accept the risk."
+        "(shell_exec, terminal, write_file, edit_file, patch, delete_file) after you accept the risk."
     ),
     "parameters": {
         "type": "object",
@@ -78,6 +78,23 @@ APPROVE_RISKY = {
             "reason": {
                 "type": "string",
                 "description": "Brief reason you need risky tools this session",
+            },
+        },
+    },
+}
+
+CLAIMCHECK_STATUS = {
+    "name": "claimcheck_status",
+    "description": (
+        "Inspect the ClaimCheck double-entry reconciliation ledger: view open mutations, "
+        "empirical verification receipts, ledger parity state, and cryptographic attestation vouchers."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "verbose": {
+                "type": "boolean",
+                "description": "If true, include detailed receipt digests and full hashes.",
             },
         },
     },

@@ -1,4 +1,4 @@
-"""Hermes tool handlers."""
+"""Hermes tool handlers and slash commands."""
 
 from __future__ import annotations
 
@@ -50,6 +50,7 @@ def record_observation(args: dict[str, Any], **kwargs: Any) -> str:
             "ok": True,
             "observation": obs.to_dict(),
             "receipt_path": str(state.store.path),
+            "attestation": obs.receipt_hash,
         }
     )
 
@@ -112,3 +113,36 @@ def approve_risky(args: dict[str, Any], **kwargs: Any) -> str:
             "reason": reason or None,
         }
     )
+
+
+def claimcheck_status(args: dict[str, Any], **kwargs: Any) -> str:
+    state = _require_state()
+    session_id = session_key_from_kwargs(kwargs)
+    ledger = state.ledger(session_id)
+    voucher = state.generate_attestation_voucher(session_id)
+    certificate = state.format_ascii_certificate(session_id)
+    return json.dumps(
+        {
+            "ok": True,
+            "session_id": session_id,
+            "is_balanced": not ledger.has_unverified_mutations,
+            "unverified_mutations": ledger.unverified_paths(),
+            "mutation_count": len(ledger.mutations),
+            "observation_count": len(ledger.observations),
+            "voucher": voucher,
+            "certificate": certificate,
+        }
+    )
+
+
+def claimcheck_slash_command(raw_args: str) -> str:
+    """In-session slash command /claimcheck."""
+    state = _require_state()
+    session_id = "default"
+    # Generate visual certificate and summary
+    cert = state.format_ascii_certificate(session_id)
+    ledger = state.ledger(session_id)
+    status = "BALANCED (Parity Achieved)" if not ledger.has_unverified_mutations else "DEFICIT (Unverified Mutations)"
+    unverified = ledger.unverified_paths()
+    unverified_str = f"\n⚠️ Pending Verification: {', '.join(unverified)}" if unverified else ""
+    return f"{cert}\n\nLedger State: {status} | Mutations: {len(ledger.mutations)} | Receipts: {len(ledger.observations)}{unverified_str}"

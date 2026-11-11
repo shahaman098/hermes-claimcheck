@@ -1,15 +1,18 @@
 name: claimcheck
-version: "1.0.0"
-description: Enforce verify-before-done discipline with local observation receipts and optional risky-tool gating.
+version: "2.0.0"
+description: Double-entry verification interlock kernel for Hermes Agent. Enforces empirical proof and cryptographic receipts before task completion.
 author: shahaman098
 provides_tools:
   - record_observation
   - list_observations
   - export_receipt
   - approve_risky
+  - claimcheck_status
 provides_hooks:
   - pre_tool_call
   - post_tool_call
+  - pre_verify
+  - pre_llm_call
   - post_llm_call
 license: MIT
 homepage: https://github.com/shahaman098/hermes-claimcheck
