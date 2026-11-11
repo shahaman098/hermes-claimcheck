@@ -1,0 +1,15 @@
+name: claimcheck
+version: "1.0.0"
+description: Enforce verify-before-done discipline with local observation receipts and optional risky-tool gating.
+author: shahaman098
+provides_tools:
+  - record_observation
+  - list_observations
+  - export_receipt
+  - approve_risky
+provides_hooks:
+  - pre_tool_call
+  - post_tool_call
+  - post_llm_call
+license: MIT
+homepage: https://github.com/shahaman098/hermes-claimcheck
