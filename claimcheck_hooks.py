@@ -4,12 +4,20 @@ from __future__ import annotations
 
 from typing import Any
 
-from .core import (
-    ClaimCheckState,
-    NUDGE_TEXT,
-    is_mutation_tool,
-    session_key_from_kwargs,
-)
+try:
+    from .core import (
+        ClaimCheckState,
+        NUDGE_TEXT,
+        is_mutation_tool,
+        session_key_from_kwargs,
+    )
+except ImportError:
+    from core import (
+        ClaimCheckState,
+        NUDGE_TEXT,
+        is_mutation_tool,
+        session_key_from_kwargs,
+    )
 
 
 class _HookContext:

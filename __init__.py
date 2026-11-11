@@ -4,8 +4,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from . import hooks, schemas, tools
-from .core import ClaimCheckState, ReceiptStore
+try:
+    from . import claimcheck_hooks as hooks, claimcheck_tools as tools, schemas
+    from .core import ClaimCheckState, ReceiptStore
+except ImportError:
+    import claimcheck_hooks as hooks
+    import claimcheck_tools as tools
+    import schemas
+    from core import ClaimCheckState, ReceiptStore
 
 PLUGIN_ID = "claimcheck"
 TOOLSET = "claimcheck"

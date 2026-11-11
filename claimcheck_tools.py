@@ -6,7 +6,10 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from .core import ClaimCheckState, session_key_from_kwargs
+try:
+    from .core import ClaimCheckState, session_key_from_kwargs
+except ImportError:
+    from core import ClaimCheckState, session_key_from_kwargs
 
 if TYPE_CHECKING:
     pass
@@ -139,7 +142,6 @@ def claimcheck_slash_command(raw_args: str) -> str:
     """In-session slash command /claimcheck."""
     state = _require_state()
     session_id = "default"
-    # Generate visual certificate and summary
     cert = state.format_ascii_certificate(session_id)
     ledger = state.ledger(session_id)
     status = "BALANCED (Parity Achieved)" if not ledger.has_unverified_mutations else "DEFICIT (Unverified Mutations)"
